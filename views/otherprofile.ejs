@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        #container{
+            background-color: gray;
+            margin: auto;
+            margin-top: 50px;
+            text-align: center;
+            max-width: fit-content;
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            border-radius: 8px;
+        }
+        a{
+            text-decoration: none;
+            font-size: x-large;
+            color: white;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id = container>
+        <h1><%= user.username %> <br></h1>
+        <h2> Email:</h2>
+        <h2><%= user.email %></h2>
+        <h2> Type:</h2>
+        <h4><%= user.type %></h4>
+        <h2>Teams : </h2>
+        <h3><%= user.teams %> </h3>
+        <% let list  = [] %> 
+        <% for(let teams of t) { %>
+	
+	
+		
+        
+         
+            <% for(let i=0;i<teams.members.length;i++){ %>
+               <% list += teams.members[i].username %> 
+               
+   
+          
+           <% } %> 
+           <% if(list.includes(user.username)) {%>
+               <h4><%= teams.name %></h4>
+               
+           <% } %> 
+           <%  list  = [] %> 
+           
+          
+   
+       <% } %> 
+      
+        <% if(n.type === 'member'){ %> 
+           
+            <a href = '/dashboard'>Back To Dashboard</a>
+        
+        <% }else{ %>
+            <a href = '/dashboard1'>Back To Dashboard</a>
+        <% } %> 
+        
+  
+    </div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        #contain{
+            padding:80px
+        }
+        a{
+            text-decoration: none;
+            color: rgb(187, 7, 127);
+            font-size: 20px;
+        }
+        a:hover{
+            text-decoration:underline;
+            color: cornflowerblue;
+        }
+        .notify{
+            background-color: rgb(148, 148, 148);
+            /* padding: 5px; */
+            max-width: 600px;
+            justify-content: center;
+            padding-top: 5px;
+            padding-bottom: 15px;
+            border-radius: 10px;
+            margin: 10px;
+
+        }
+        .acc{
+            padding: 10px;
+            background-color: rgb(74, 233, 26);
+            border-color: rgb(10, 95, 21);
+            font-weight: bold;
+            font-size: larger;
+            border-radius: 5px;
+        }
+        .dec{
+            padding: 10px;
+            background-color: rgb(236, 95, 76);
+            border-color: rgb(133, 14, 6);
+            font-weight: bold;
+            font-size: larger;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/flash1') %>
+    <%- include('partials/navbar') %>
+    
+<div id = "contain">
+    <center>
+        
+        <h1 style="font-family: Copperplate, Copperplate Gothic Light  , fantasy; font-size: 45px;">Poll Booth</h1>
+        <h2>An amazing website for managing your teams and creating polls in the teams and to known your team mates ideas</h2>
+    </center> 
+    <!-- <h1>Welcome <%= n.username %> </h1>
+    
+    <h1>Teams</h1> -->
+    <% let list  = [] %> 
+    <% let list1  = [] %> 
+    <% for(let teams of t) { %>
+	
+	
+		
+        
+         
+         <% for(let i=0;i<teams.members.length;i++){ %>
+            <% list += teams.members[i].username %> 
+            
+
+       
+        <% } %> 
+        <% for(let i=0;i<teams.invited.length;i++){ %>
+            <% list1 += teams.invited[i].username %> 
+            
+
+       
+        <% } %> 
+        <% if(list1.includes(n.username)) {%>
+            <center>
+                <div class = "notify">
+                    <h2><%= teams.owner %> has invited you to join the team <%= teams.name %></h2> <br>
+                    <a href="/accept/<%= teams._id %>"><button class = "acc">Accept</button></a> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                    <a href = "/decline/<%= teams._id %>"><button class = "dec">Decline</button></a> 
+                </div>
+            </center>  
+
+           
+           
+            
+        <% } %> 
+        
+        <%  list  = [] %> 
+        <%  list1  = [] %> 
+       
+
+    <% } %> 
+
+
+    
+ </div>
+</body>
+</html>

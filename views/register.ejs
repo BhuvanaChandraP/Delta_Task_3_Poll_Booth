@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+       
+        #container{
+            background-color: rgb(160, 160, 160);
+            /* display:flex; */
+            text-align: center;
+            max-width: fit-content;
+            padding: 50px;
+            margin: auto;
+            border-radius: 6px;
+            margin-top: 50px;
+        }
+        input{
+            /* border-top: none; */
+            border: none;
+            /* padding: 8px; */
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            text-align: center;
+            border-radius: 8px;
+          
+        }
+        button{
+            font-size: 15px;
+            padding: 8px;
+            border-radius: 5px;
+            border-width: 2px;
+            background-color: cornsilk;
+            color: black;
+        }
+        button:hover{
+            color: rgb(35, 211, 44);
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+   
+    <%- include('partials/flash') %>  
+      
+ <div id = "container">
+    <h1>Register</h1>
+    
+    <form action="/register" method="POST" >
+        <div>
+            <label class="form-label" for="email">Email</label><br>
+            <input class="form-control" type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div>
+            <label class="form-label" for="username">User Name</label><br>
+            <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required>
+        </div>
+
+        <div>
+            <label class="form-label" for="password">Password</label><br>
+            <input class="form-control" type="password" id="password" name="password" placeholder= "Password"  minlength="6" required  onkeyup="CheckPasswordStrength(this.value)"><br>
+            <label>Password Strength: </label><strong id="password_strength"></strong>
+        </div>
+        <div id = "type"  >
+            User Type :<br>
+            <input type="radio" id="admin" name="type" value="admin" required>Admin &nbsp&nbsp&nbsp
+            <input type="radio" id="member" name="type" value="member">Member<br>
+        </div>
+        <div id = "gender" >
+            Gender : <br>
+            <input type="radio" id="female" name="gender" value="female" required>Female &nbsp&nbsp&nbsp
+            <input type="radio" id="male" name="gender" value="male">Male<br>
+        </div>
+        <div>
+            <br>
+            <button>Register</button>
+        </div>
+    </form>
+    <h3>Already have a account <a href ="login">login</a> here</h3>
+ </div>
+    <script>
+        function CheckPasswordStrength(password) {
+var password_strength = document.getElementById("password_strength");
+
+       
+        if (password.length == 0) {
+            password_strength.innerHTML = "";
+            return;
+        }
+
+        
+        var regex = new Array();
+        regex.push("[A-Z]"); 
+        regex.push("[a-z]"); 
+        regex.push("[0-9]"); 
+        regex.push("[$@$!%*#?&]"); 
+
+        var passed = 0;
+
+        //Validate for each Regular Expression.
+        for (var i = 0; i < regex.length; i++) {
+            if (new RegExp(regex[i]).test(password)) {
+                passed++;
+            }
+        }
+
+        
+        var color = "";
+        var strength = "";
+        switch (passed) {
+            case 0:
+            case 1:
+            case 2:
+                strength = "Weak";
+                color = "red";
+                break;
+            case 3:
+                 strength = "Medium";
+                color = "orange";
+                break;
+            case 4:
+                 strength = "Strong";
+                color = "green";
+                break;
+               
+        }
+        password_strength.innerHTML = strength;
+        password_strength.style.color = color;
+
+
+
+     }
+    </script>
+   
+</body>
+</html>

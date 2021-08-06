@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Poll</title>
+    <style>
+        #container{
+            background-color: rgb(160, 160, 160);
+            /* display:flex; */
+            text-align: center;
+            max-width: 200px;
+            padding: 50px;
+            margin: auto;
+            border-radius: 6px;
+            margin-top: 50px;
+            /* width: 200px; */
+        }
+        input{
+            /* border-top: none; */
+            border: none;
+            /* padding: 8px; */
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            text-align: center;
+            border-radius: 8px;
+        
+        }
+        #deadline{
+            border: none;
+            /* padding: 8px; */
+            /* padding-left: 50px; */
+            /* padding-right: 50px;
+            padding-top: 8px;
+            padding-bottom: 8px; */
+            /* text-align: center; */
+            border-radius: 8px;
+            width: 120px;
+        }
+        .options{
+            display: block;
+            width: 100px;
+            margin-top: 10px;
+            
+        }
+        #question{
+            line-break: auto;
+            width: 100px;
+            height: 80px;
+        }
+        a{
+            text-decoration: none;
+            font-size: x-large;
+            color: white;
+        }
+        button{
+            padding: 5px;
+            background-color: white;
+            color: black;
+            border-radius: 5px;
+        }
+        /* #container1{
+            padding: 10px;
+        } */
+    </style>
+</head>
+<body>
+   <div id = "container" >
+        <button onclick="add();">Add option</button><br> <br>
+        
+        
+        <form   action = "/poll/<%= team1._id %> " method="POST"  >
+            
+           
+            <label  for="question">Question :</label><br>
+            <input id = "question" type="text" name="question" placeholder="Question" required >
+
+            
+            <div id = "container1">
+                <label  for="options">Options :</label><br>
+                <input  type="text" class ="options" name="options" placeholder="Option 1" required>
+               
+                
+            </div>
+            <br><br>
+            <label  for="deadline">Deadline :</label><br>
+            <input type="datetime-local" name="deadline" id="deadline" placeholder="Deadline" required>
+            <br><br>
+            <button>Create Poll</button>
+        </form>
+        <br><br>
+        <a href = '/team/:<%= team1._id %>'>Back To Team</a>
+        
+    </div>
+    <script>
+        let i = 1
+        i++;
+        function add(){           
+            var container = document.getElementById("container1")
+            var input = document.createElement("input");               
+            input.type = "text";
+            input.className =  "options" ;
+            input.placeholder = `Option ${i}`;  
+            input.name = "options" ;        
+            container.appendChild(input);
+            
+            i++;
+        }
+       
+        
+    </script>
+    
+</body>
+</html>

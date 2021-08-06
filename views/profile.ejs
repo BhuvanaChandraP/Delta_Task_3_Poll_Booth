@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        #contain{
+            position: absolute;
+            top:150px;
+            justify-content: center;
+            left: 40%;
+            /* right: 50%; */
+            background-color: gray;
+            /* margin: auto; */
+            /* margin-top: 150px; */
+            text-align: center;
+            max-width: fit-content;
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-top: 50px;
+            padding-bottom: 30px;
+            border-radius: 8px;
+        }
+        @media (max-width: 968px){
+            #contain{
+            
+            left: 20%;
+        }
+        }
+    </style>
+</head>
+<body>
+    <% if(user.type === 'member'){ %> 
+           
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar') %>
+    
+    <% }else{ %>
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar1') %>
+    <% } %>
+    <div id = contain>
+        <h1><%= user.username %> </h1><br>
+        <h2> Email:</h2>
+        <h2><%= user.email %></h2><br>
+        <h2> Type:</h2>
+        <h4><%= user.type %></h4><br>
+        <h2>Teams : </h2>
+        <h3><%= user.teams %> </h3>
+        <% let list  = [] %> 
+        <% for(let teams of t) { %>
+	
+	
+		
+        
+         
+            <% for(let i=0;i<teams.members.length;i++){ %>
+               <% list += teams.members[i].username %> 
+               
+   
+          
+           <% } %> 
+           <% if(list.includes(user.username)) {%>
+               <h4><%= teams.name %></h4>
+               
+           <% } %> 
+           <%  list  = [] %> 
+           
+          
+   
+       <% } %> 
+      
+        
+        
+  
+    </div>
+</body>
+</html>

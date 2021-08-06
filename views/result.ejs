@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #contain{
+            padding-top: 100px;
+            padding-bottom: 100px;
+            text-align: center;
+            font-size: 30px;
+        }
+        a{
+            text-decoration: none;
+            color: rgb(40, 238, 14);
+        }
+        #piechart{
+            
+            margin-left: 550px;
+        }
+        @media (max-width: 968px){
+            #contain{
+            
+            font-size: 20px;
+        }
+        #piechart{
+           
+            margin-left: 250px;
+        }
+        }
+        @media (max-width: 868px){
+            #piechart{
+           
+           margin-left: 100px;
+         }
+        }
+        @media (max-width: 768px){
+            #piechart{
+           
+           margin-left: 50px;
+         }
+        }
+    </style>
+</head>
+<body>
+
+    <% if(n.type === 'member'){ %> 
+           
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar') %>
+    
+    <% }else{ %>
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar1') %>
+    <% } %>
+    <div id = "contain">
+        <% let arr %> 
+        <% arr = [] %> 
+        <% let brr %> 
+        <% brr = p.options %> 
+        <% let num %> 
+        <% num = p.options.length %> 
+        <% for(let i =0;i<p.options.length;i++){ %>
+            <% arr[i] = 0 %> 
+        <% } %>  
+        <% for(let i =0;i<p.options.length;i++){ %>
+            <% brr[i] = p.options[i] %> 
+        <% } %>  
+        <% for(let i =0 ;i<p.answers.length;i++){ %>
+            <% for(let j =0 ; j<p.options.length;j++){ %> 
+                <% if(p.answers[i] == p.options[j]) {%>
+                    <% arr[j] = arr[j]+1 %> 
+                <% } %> 
+            <% } %> 
+        <% } %>  
+        <% for(let i =0;i<p.options.length;i++){ %>
+            <h3> Option : <%=  p.options[i] %> &nbsp &nbsp &nbsp &nbsp  votes : <%= arr[i] %> </h3> 
+        <% } %> 
+        <br>
+        <br>
+        <div id="piechart"></div>
+
+        <a href = "/team/:<%= p.team._id %>">Back To Team</a>
+    </div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+// Load google charts
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+
+function drawChart() {
+   
+    let d = '<%-brr%>'
+    let d1 = '<%-arr%>'
+    let d2 = '<%-num%>'
+    let d3;
+
+    let separatedArray = [];  
+    originalString = d;           
+    let previousIndex = 0;
+    for (i = 0; i < originalString.length; i++) {
+                
+        if (originalString[i] == ',') {                  
+            separated = originalString.slice(previousIndex, i);                    
+            separatedArray.push(separated); 
+             previousIndex = i + 1;
+        }
+    }          
+    separatedArray.push(originalString.slice(previousIndex, i));    
+    d = separatedArray   
+    
+    
+    previousIndex = 0;
+    originalString = d1;
+    separatedArray = [];
+    for (i = 0; i < originalString.length; i++) {            
+        if (originalString[i] == ',') {            
+            separated =  originalString.slice(previousIndex, i);                      
+            separatedArray.push(parseInt(separated));               
+            previousIndex = i + 1;
+        }
+    }       
+    separatedArray.push(parseInt(originalString.slice(previousIndex, i)));         
+    d1 = separatedArray;
+
+
+
+        let crr = [];
+        crr.push(['Result' , 'Results'])
+        for(let i =0; i< d2 ;i++)
+        {
+            
+                crr.push([ d[i] , d1[i] ])
+            
+            
+        }
+        console.log(crr)
+        var data = google.visualization.arrayToDataTable(crr);
+      
+  
+
+
+  var options = {'title':'Results', 'width':550, 'height':300};
+
+ 
+  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  chart.draw(data, options);
+}
+</script>
+
+</body>
+</html>

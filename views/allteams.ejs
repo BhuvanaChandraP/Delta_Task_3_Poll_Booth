@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Teams</title>
+    <style>
+        #contain{
+            
+            padding:80px
+
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        .collapsible {
+        background-color: #777;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        }
+
+        .active, .collapsible:hover {
+        background-color: #555;
+        }
+
+        .collapsible:after {
+        content: '\002B';
+        color: white;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+        }
+
+        .active:after {
+        content: "\2212";
+        }
+
+        .content {
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <% if(n.type === 'member'){ %> 
+           
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar') %>
+    
+    <% }else{ %>
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar1') %>
+    <% } %>
+    <h1>Teams</h1>
+    <% let list  = [] %> 
+    <div id = "contain">
+    <% for(let teams of t) { %>
+	
+	         
+         <% for(let i=0;i<teams.members.length;i++){ %>
+            <% list += teams.members[i].username %> 
+            
+
+       
+        <% } %> 
+        <% if(list.includes(n.username)) {%>
+           
+           
+            <button class="collapsible"><%= teams.name %></button>
+            <div class="content">
+                <br>
+                <a href = '/team/:<%= teams._id %>'>
+                    <p style="font-size: 20px;">Created By :<%= teams.owner %> </p>
+                    <p><%= teams.description %></p>
+                </a>
+                <br>
+            </div>
+            <br>
+            <br>
+            
+           
+            
+        <% } %> 
+        <%  list  = [] %> 
+        
+       
+
+    <% } %> 
+    </div>
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+        
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            } 
+          });
+        }
+    </script>
+   
+</body>
+</html>

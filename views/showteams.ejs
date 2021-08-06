@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #contain{
+            
+            padding-top:80px;
+            padding-bottom: 80px;
+            /* text-align:center; */
+        }
+        #create{
+            text-decoration: none;
+            color: black;
+            font-size: xx-large;
+           
+        }
+        #c{
+            background-color: blanchedalmond;
+            max-width: fit-content;
+            margin: auto;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .polls{
+            margin: auto;
+            background-color: rgb(121, 121, 121);
+            min-width: 400px;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        a{
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+        }
+        #members{
+            
+            margin-left: 700px;
+        }
+        #title{
+            text-align: center;
+        }
+        @media (max-width: 968px){
+            #members{
+            
+            margin-left: 400px;
+          }
+        }
+        @media (max-width: 798px){
+            #members{
+            
+            margin-left: 150px;
+          }
+        }
+    </style>
+</head>
+<body>
+    <% if(n.type === 'member'){ %> 
+           
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar') %>
+    
+    <% }else{ %>
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar1') %>
+    <% } %>
+    <% let i %> 
+    <div id = "contain">
+        <div id = "title">
+            <h2 style="font-family: Copperplate, Copperplate Gothic Light, fantasy; font-size:xxx-large"><%= team1.name %></h2>
+            <h3>Description : <%= team1.description %></h3><br><br>
+        </div>
+    <% if(n.type === "admin"){ %> 
+        <div id = "c">
+            <a href = "/poll/<%= team1._id %>" id = "create"> Create a poll</a>
+        </div>
+    <% } %> 
+    <br><br>
+    <h2 style="text-align: center;">Polls</h2>
+    <% let list  = [] %> 
+    <% for(  i = poll1.length-1 ; i>=0;i--){ %> 
+        <% var deadlineDate = new Date(poll1[i].deadline) %> 
+        <% var now = Date.now() %> 
+        <div class = "polls">
+            <h2><%= poll1[i].question %></h2> <br>
+            <% for(let j=0;j<poll1[i].voted.length;j++){ %>
+                <% list += poll1[i].voted[j] %>        
+            <% } %> 
+            <% if(list.includes(n._id)) {%>
+
+
+                <% } else {%>
+                <% if(poll1[i].state === "active" && deadlineDate > now ) { %>
+                        <a href = "/displaypolls/<%= poll1[i]._id %>">Vote Here</a> &nbsp &nbsp &nbsp 
+                        
+                    <% } %> 
+            
+            <% } %> 
+            <%  list  = [] %>  
+            
+            <% if(poll1[i].state === "inactive" || deadlineDate < now ) { %>
+                &nbsp &nbsp &nbsp <a href = "/result/<%= poll1[i]._id %>">Results</a> &nbsp &nbsp &nbsp            
+            <% } %> 
+            
+            <% if(n.type === "admin" && poll1[i].state === "active"){ %>                  
+               
+                <% if(deadlineDate > now) { %> 
+                    <a href = "/endpoll/<%= poll1[i]._id %>">End Pole</a> &nbsp &nbsp &nbsp 
+                    <a href = "/result/<%= poll1[i]._id %>">Results</a>   
+                <% } %>                     
+            <% } %> 
+        </div>
+        <br><br>
+         
+    <%} %> 
+    
+    <div id = "members" >
+        <h2>Members</h2>
+        <% for(let i=0;i<team1.members.length;i++){ %>
+            <li ><%= team1.members[i].username %></li> 
+            
+
+    
+        <% } %> 
+    </div>
+    
+    
+</div> 
+    <!-- <script>
+        const some =  Poll.findById(poll1[i]._id)
+        console.log(some)
+        function showresult(){
+            const some = Poll.findById(poll1[i]._id)
+            console.log(some)
+           poll1[i].state = "inactive"
+        }
+    </script> -->
+</body>
+</html>
+
+
+

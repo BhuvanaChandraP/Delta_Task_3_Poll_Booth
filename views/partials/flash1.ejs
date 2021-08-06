@@ -1,0 +1,70 @@
+<style>
+    .alert {
+      position: absolute;
+      top:70px;
+      right:10px;
+      padding: 20px;
+      background-color: #ff3526; /* Red */
+      color: white;
+      opacity: 1;
+      width: 90%;
+      max-width: 450px;
+      margin: auto;
+      /* margin-top: 100px; */
+      margin-bottom: 15px;
+      z-index: 10;
+      border-radius: 8px;
+    }
+  
+    
+    .closebtn {
+      margin-left: 15px;
+      /* color: white; */
+      color: blueviolet;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+  
+    /* When moving the mouse over the close button */
+    .closebtn:hover {
+      color: black;
+    }
+  
+    .alert.success {
+        color: black;
+      background-color: #18ff20;
+    }
+
+    @media (max-width: 1280px){
+        .alert.success{
+            display: none;
+        }
+        .alert.error{
+            display: none;
+        }
+    }
+  </style>
+  
+  
+  <% if(error != ''){%>
+  <div class="alert error">
+    <%= error %>
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+      >&times;</span
+    >
+  </div>
+  <% } %>
+  
+   <% if(success != ''){%>
+  <div class="alert success">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+      >&times;</span
+    >
+    <%= success %>
+  </div>
+  <% } %>
+  

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Team</title>
+    <style>
+       
+        #container{
+            background-color: rgb(160, 160, 160);
+            text-align: center;
+            max-width: fit-content;
+            padding: 50px;
+            margin: auto;
+            border-radius: 6px;
+            margin-top: 50px;
+            padding-left: 100px;
+            padding-right: 100px;
+        }
+        input{
+            border: none;
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            text-align: center;
+            border-radius: 8px;
+          
+        }
+        #choose{
+            text-align: center;
+        }
+        button{
+            font-size: 15px;
+            padding: 8px;
+            border-radius: 5px;
+            border-width: 2px;
+            background-color: cornsilk;
+            color: black;
+        }
+        button:hover{
+            color: rgb(15, 195, 39);
+            background-color: black;
+        }
+        a{
+            text-decoration: none;
+            font-size: x-large;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+  
+   
+ <div id = "container">
+    <h1>Create New Team</h1>
+    
+    <form action="/CreateNewTeam" method="POST">
+        
+        <div>
+            <label  for="name">Team Name</label><br>
+            <input type="text" id="name" name="name" placeholder="Team Name" required>
+        </div>
+        <!-- <br>
+        <div>
+            <label  for="owner">Owner Name</label><br>
+            <input type="text" id="owner" name="owner" placeholder="your user name)" required>
+        </div> -->
+        <br>
+        <div>
+            <label  for="description">Description</label><br>
+            <input type="text" id="description" name="description" placeholder="Description" required>
+        </div>
+        <br>
+        
+        <div>
+            <label id = "choose" for="members">Choose Members:</label><br>
+
+                <% for(let users of use) { %>
+                    <% if(users.username !== n.username) {%> 
+                        <input style="vertical-align: middle" type = "checkbox"  name = "members"  value = <%= users._id %> > <%= users.username %> <br>
+                        <% } %> 
+                    
+                <% }%>
+           
+        </div>
+        <div>
+            <label id = "choose" for="invited">Choose people to invite:</label><br>
+
+                <% for(let users of use) { %>
+                    <% if(users.username !== n.username) {%> 
+                        <input type = "checkbox" name = "invited" value = <%= users._id %> > <%= users.username %> <br>
+                    <% } %> 
+                    
+                <% }%>
+           
+        </div>
+        
+
+        
+        <div>
+            <br>
+            <button>Create Team</button>
+        </div><br>
+        <a href = "/dashboard1">Back to dashboard</a>
+    </form>
+ </div>
+   
+</body>
+</html>
+
+

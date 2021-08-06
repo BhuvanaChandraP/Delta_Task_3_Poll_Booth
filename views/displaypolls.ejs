@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll</title>
+    <style>
+        #contain{
+            padding: 100px;
+            margin-left: 600px;
+        }
+        a{
+            text-decoration: none;
+            font-size: xx-large;
+            color: rgb(40, 238, 14);
+        }
+        span{
+            font-size: 20px;
+        }
+        button{
+            font-size: 20px;
+            margin-left: 40px;
+            padding: 8px;
+            background-color: rgb(116, 8, 116);
+            border-radius: 5px;
+            color: wheat;
+        }
+        button:hover{
+            background-color: white;
+            color: rgb(116, 8, 116);
+        }
+       
+        @media (max-width: 968px){
+            #contain{
+            
+            margin-left: 400px;
+          }
+          button{
+            margin-left: 40px;
+        }
+        }
+        @media (max-width: 798px){
+            #contain{
+            
+            margin-left: 200px;
+          }
+          button{
+            margin-left: 20px;
+        }
+            a{
+                font-size: x-large;
+            }
+        }
+    </style>
+</head>
+<body>
+    <% if(n.type === 'member'){ %> 
+           
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar') %>
+    
+    <% }else{ %>
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar1') %>
+    <% } %>
+    <div id = "contain">
+        <h1><%= p.question %></h1> <br>
+        Options are :<br> <br>
+            <form action = "/displaypolls/<%= p._id %>" method="POST" id = <%= p.question %> >
+                <% for(opt of p.options){%>               
+                        <input type="radio" class ="options" name="options" value="<%= opt %>" required ><span>&nbsp  <%= opt %></span><br>                       
+                <% }%>
+                <br> <br>
+                <button>Submit</button>
+            </form> 
+            <br> <br>
+            <a href = "/team/:<%= team1._id %>">Back to team</a>
+    </div>
+</body>
+</html>

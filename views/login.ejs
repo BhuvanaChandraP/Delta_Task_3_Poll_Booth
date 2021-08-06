@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* body{
+            background-color: aqua;
+        } */
+        #container{
+            background-color: rgb(160, 160, 160);
+            /* display:flex; */
+            text-align: center;
+            max-width: fit-content;
+            padding: 50px;
+            margin: auto;
+            border-radius: 6px;
+            margin-top: 50px;
+        }
+        input{
+            /* border-top: none; */
+            border: none;
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        button{
+            font-size: 15px;
+            padding: 8px;
+            border-radius: 5px;
+            border-width: 2px;
+            background-color: cornsilk;
+            color: black;
+        }
+        button:hover{
+            color: rgb(15, 195, 39);
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('partials/flash') %>
+ <div id = "container">
+    <h1>Login</h1>
+    
+    <form action="/login" method="POST" >
+       
+        <div>
+            <label class="form-label" for="username">User Name</label><br>
+            <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required><br>
+        </div>
+
+        <div>
+            <label class="form-label" for="password">Password</label><br>
+            <input class="form-control" type="password" id="password" name="password" placeholder= "Password" required><br>
+        </div>
+        
+        <div>
+            <br>
+            <br>
+            <button>Login</button>
+        </div>
+    </form>
+    <h3>Don't  have a account <a href ="register">Register</a> here</h3>
+ </div>
+</body>
+</html>
