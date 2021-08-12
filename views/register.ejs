@@ -5,22 +5,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Spartan:wght@100&display=swap" rel="stylesheet">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Spartan:wght@100&display=swap" rel="stylesheet">
     <style>
-       
+       body{
+           background-color: rgb(24, 24, 24);
+           /* font-family: 'Lobster', cursive;
+            font-family: 'Spartan', sans-serif; */
+            font-family: 'Lobster', cursive;
+            font-family: 'Spartan', sans-serif;
+            font-weight: bolder;
+            /* font-weight: 100; */
+            color: black;
+       }
         #container{
-            background-color: rgb(160, 160, 160);
+            background-color: rgb(255, 254, 254);
             /* display:flex; */
             text-align: center;
             max-width: fit-content;
-            padding: 50px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 50px;
+            padding-right: 50px;
+            /* padding: 50px; */
             margin: auto;
             border-radius: 6px;
-            margin-top: 50px;
+            margin-top: 10px;
         }
         input{
-            /* border-top: none; */
-            border: none;
-            /* padding: 8px; */
+            
             padding-left: 50px;
             padding-right: 50px;
             padding-top: 8px;
@@ -53,27 +72,29 @@
     <form action="/register" method="POST" >
         <div>
             <label class="form-label" for="email">Email</label><br>
-            <input class="form-control" type="email" id="email" name="email" placeholder="Email" required>
+            <input class="form-control" type="email" id="email" name="email" placeholder="Email" required><br><br>
         </div>
         <div>
             <label class="form-label" for="username">User Name</label><br>
-            <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required>
+            <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required><br><br>
         </div>
 
         <div>
             <label class="form-label" for="password">Password</label><br>
-            <input class="form-control" type="password" id="password" name="password" placeholder= "Password"  minlength="6" required  onkeyup="CheckPasswordStrength(this.value)"><br>
-            <label>Password Strength: </label><strong id="password_strength"></strong>
+            <input class="form-control" type="password" id="password" name="password" placeholder= "Password"  minlength="6" required  onkeyup="CheckPasswordStrength(this.value)"><br><br>
+            <label>Password Strength: </label><strong id="password_strength"></strong><br><br>
         </div>
+        <!-- <h4>Teachers and CR's are requested to choose Admin Roll</h4> -->
         <div id = "type"  >
-            User Type :<br>
-            <input type="radio" id="admin" name="type" value="admin" required>Admin &nbsp&nbsp&nbsp
-            <input type="radio" id="member" name="type" value="member">Member<br>
+            User Roll :<br>
+            <input type="radio" id="admin" name="type" value="admin" required>Teacher &nbsp&nbsp&nbsp
+            <input type="radio" id="admin" name="type" value="admin" required>CR &nbsp&nbsp&nbsp
+            <input type="radio" id="member" name="type" value="member">Student<br><br>
         </div>
         <div id = "gender" >
             Gender : <br>
             <input type="radio" id="female" name="gender" value="female" required>Female &nbsp&nbsp&nbsp
-            <input type="radio" id="male" name="gender" value="male">Male<br>
+            <input type="radio" id="male" name="gender" value="male">Male<br><br>
         </div>
         <div>
             <br>

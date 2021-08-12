@@ -34,18 +34,3 @@ UserSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User',UserSchema);
 module.exports = User ;
-// username: {
-//     type: String, 
-//     required: true,
-//     unique: true
-// },
-// password: {
-//     type: String,
-//     required: true,
-//     min: 6
-// },
-// teams :[{
-// type: mongoose.Schema.Types.ObjectId,
-// ref: 'Team'
-// }]
-//

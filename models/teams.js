@@ -26,6 +26,11 @@ const TeamSchema = new Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref:'Poll'
        
+    },
+    chats:{
+        type: [mongoose.Schema.Types.ObjectId],
+        ref:'Message'
+
     }
 
 
@@ -35,15 +40,3 @@ const TeamSchema = new Schema({
 const Team = mongoose.model('Team',TeamSchema);
 module.exports = Team ;
 
-// members:[{
-// type: mongoose.Schema.Types.ObjectId,
-//ref: 'User'
-       
-       
-//}],
-
-
-// members:{
-//    type:[String]
-//},
-//

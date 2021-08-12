@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Team</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #contain{
             
@@ -39,9 +40,19 @@
             color: white;
             font-size: 20px;
         }
+        #chat{
+            background-color: blanchedalmond;
+            max-width: fit-content;
+            /* margin: auto; */
+            padding: 10px;
+            border-radius: 10px;
+            /* float: center;
+            text-align: center; */
+            margin-left: 645px;
+        }
         #members{
             
-            margin-left: 700px;
+            margin-left: 650px;
         }
         #title{
             text-align: center;
@@ -76,19 +87,37 @@
             <h2 style="font-family: Copperplate, Copperplate Gothic Light, fantasy; font-size:xxx-large"><%= team1.name %></h2>
             <h3>Description : <%= team1.description %></h3><br><br>
         </div>
+    
     <% if(n.type === "admin"){ %> 
         <div id = "c">
             <a href = "/poll/<%= team1._id %>" id = "create"> Create a poll</a>
+            
         </div>
     <% } %> 
     <br><br>
+    <a href = "/chat/<%= team1._id %>" style="color: black;" id = "chat"> Chat </a>
+    <br><br>
     <h2 style="text-align: center;">Polls</h2>
     <% let list  = [] %> 
+    <% let list1  = [] %> 
     <% for(  i = poll1.length-1 ; i>=0;i--){ %> 
+        <% console.log(poll1[i].calAdd) %> 
+        <% if(poll1[i].calAdd !== null){ %> 
+            <% for(let j=0;j<poll1[i].calAdd.length;j++){ %>
+                <% list1 += poll1[i].calAdd[j] %>        
+            <% } %> 
+        <% } %> 
         <% var deadlineDate = new Date(poll1[i].deadline) %> 
         <% var now = Date.now() %> 
         <div class = "polls">
-            <h2><%= poll1[i].question %></h2> <br>
+            <h2><%= poll1[i].question %></h2>
+            <% if(list1.includes(n.username)) {%>
+                <br>
+            <% } else {%> 
+                    <a href = "/pollcal/<%= poll1[i]._id %>" >
+                    <img src = "https://i.pinimg.com/originals/6e/09/90/6e099088b3deb805b68d83676af6f067.png" width="60px" height="60px"> <br>
+                    </a>
+            <% } %> 
             <% for(let j=0;j<poll1[i].voted.length;j++){ %>
                 <% list += poll1[i].voted[j] %>        
             <% } %> 
@@ -103,7 +132,7 @@
             
             <% } %> 
             <%  list  = [] %>  
-            
+            <%  list1  = [] %> 
             <% if(poll1[i].state === "inactive" || deadlineDate < now ) { %>
                 &nbsp &nbsp &nbsp <a href = "/result/<%= poll1[i]._id %>">Results</a> &nbsp &nbsp &nbsp            
             <% } %> 
@@ -116,6 +145,8 @@
                 <% } %>                     
             <% } %> 
         </div>
+       
+        
         <br><br>
          
     <%} %> 
@@ -132,15 +163,8 @@
     
     
 </div> 
-    <!-- <script>
-        const some =  Poll.findById(poll1[i]._id)
-        console.log(some)
-        function showresult(){
-            const some = Poll.findById(poll1[i]._id)
-            console.log(some)
-           poll1[i].state = "inactive"
-        }
-    </script> -->
+
+    
 </body>
 </html>
 

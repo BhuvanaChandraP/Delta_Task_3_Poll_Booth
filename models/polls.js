@@ -26,6 +26,10 @@ const PollSchema = new Schema({
     voted:{
         type:[mongoose.Schema.Types.ObjectId],
         ref:'User'
+    },
+    calAdd:{
+        type:[String]
+        
     }
 
 

@@ -7,21 +7,79 @@
     <title>Login</title>
     <style>
         /* body{
-            background-color: aqua;
+           
+            animation: animatedBackground 20s linear infinite;
+            background-repeat: repeat-y;
         } */
+        body {
+  margin:0;
+}
+
+.bg {
+  animation:slide 3s ease-in-out infinite alternate;
+  background-image: linear-gradient(-160deg, rgb(51, 143, 204) 40% , rgb(223, 93, 228) 50%, rgb(24, 23, 23) 8% ,rgb(69, 230, 104) 2%);
+  bottom:0;
+  left:-50%;
+  opacity:.5;
+  position:fixed;
+  right:-50%;
+  top:0;
+  z-index:-1;
+}
+
+.bg2 {
+  animation-direction:alternate-reverse;
+  animation-duration:4s;
+}
+
+.bg3 {
+  animation-duration:5s;
+}
+
+.content {
+  background-color:rgba(255, 255, 255, 1);
+  border-radius:.25em;
+  box-shadow:0 0 .25em rgba(0,0,0,.25);
+  box-sizing:border-box;
+  left:50%;
+  padding:10vmin;
+  position:fixed;
+  text-align:center;
+  top:50%;
+  transform:translate(-50%, -50%);
+}
+
+h1 {
+  font-family:monospace;
+}
+
+@keyframes slide {
+  0% {
+    transform:translateX(-25%);
+  }
+  100% {
+    transform:translateX(25%);
+  }
+}
         #container{
-            background-color: rgb(160, 160, 160);
-            /* display:flex; */
+            background-color: rgb(255, 255, 255);
+            /* border: 1px solid;
+            padding: 10px;
+            box-shadow: 2px 4px #888888; */
+            border: 1px solid #BFBFBF;
+            background-color: white;
+            box-shadow: 7px 7px 4px #aaaaaa;
+                      /* display:flex; */
             text-align: center;
             max-width: fit-content;
             padding: 50px;
             margin: auto;
             border-radius: 6px;
-            margin-top: 50px;
+            /* margin-top: 50px; */
         }
         input{
             /* border-top: none; */
-            border: none;
+            /* border: none; */
             padding: 8px;
             text-align: center;
             border-radius: 8px;
@@ -38,19 +96,26 @@
             color: rgb(15, 195, 39);
             background-color: black;
         }
+        input:hover{
+          width: 230px;
+        }
     </style>
 </head>
 <body>
 
     <%- include('partials/flash') %>
- <div id = "container">
+    <div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
+ <div id = "container" class="content">
     <h1>Login</h1>
     
     <form action="/login" method="POST" >
        
         <div>
             <label class="form-label" for="username">User Name</label><br>
-            <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required><br>
+            <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required><br><br>
         </div>
 
         <div>

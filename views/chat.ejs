@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body{
+            background-color: rgb(255, 255, 255);
+        }
+        .mine{
+            
+            background-color: rgb(176, 202, 176);
+            box-shadow: rgb(210, 255, 210);
+            max-width: 300px;
+            border-radius: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 800px;
+            
+            padding-top: 10px;
+            padding-bottom: 5px;
+            padding-left: 20px;
+            padding-right: 20px;
+           
+        }
+        
+        .other{
+            background-color: rgb(221, 94, 94);
+            box-shadow: hotpink;
+            max-width: 300px;
+            border-radius: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 100px;
+        }
+        #contain{
+            padding: 80px;
+        }
+        #sent{
+            /* text-align: center;
+            margin: auto; */
+            position: fixed;
+            /* padding: 10px 10px 0px 10px; */
+            top:500px;
+            left: 550px;
+            /* bottom: 100; */
+        }
+        textarea{
+            padding: 6px;
+            width: 250px;
+            border-radius: 8px;
+        }
+        #send{
+            position: fixed;
+            border-radius: 50%;
+            /* background-color: black; */
+            border: none;
+            color: white;
+            padding: 4px;
+            /* padding: 10px 10px 0px 10px; */
+            top:516px;
+            left: 820px;
+            color: green;
+            font-size: x-large;
+            width: 3px;
+            height: 3px;
+            /* transform: rotate(60deg); */
+        }
+        /* button{
+            color: white;
+            border: none;
+        } */
+        /* img{
+            color: rgb(189, 124, 124);
+        } */
+        #clear{
+           
+            margin-top: 10px;
+            background-color: rgb(236, 216, 236);
+            color: rgb(231, 107, 231);
+            padding: 8px;
+            border-radius: 5px;
+        }
+        #clear:hover{
+            background-color: white;
+        }
+        @media (max-width: 768px){
+                #sent{
+               
+                position: fixed;
+             
+                top:500px;
+                left: 250px;
+                
+            }
+            #send{
+                position: fixed;
+               
+                top:516px;
+                left: 520px;
+            }
+            .mine{
+                margin-left: 300px;
+            }
+           
+        }
+        @media (max-width: 568px){
+                #sent{
+               
+                position: fixed;
+             
+                top:500px;
+                left: 150px;
+                
+            }
+            #send{
+                position: fixed;
+               
+                top:516px;
+                left: 420px;
+            }
+            .mine{
+                margin-left: 100px;
+            }
+        }
+    </style>
+</head>
+<body onload="scrollWin()">
+    <% if(n.type === 'member'){ %> 
+           
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar') %>
+    
+    <% }else{ %>
+        <%- include('partials/flash1') %>
+        <%- include('partials/navbar1') %>
+    <% } %>
+    <div id = "contain">
+    
+    <form action="/chat/<%= team._id %>?_method=DELETE" method="POST" >
+        <button type="submit"  id = "clear" >Clear Chat</button>
+    </form>
+   
+    <% for(let i =0;i<mes.length;i++){ %> 
+        <% if(mes[i].sentBy.username == n.username){ %> 
+            <div  class = "mine">
+                
+            <h3  ><%= mes[i].content %> </h3>
+            
+        </div>
+        
+        <% }else{ %> 
+            <div class = "other">
+            <br><p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp ~ <%= mes[i].sentBy.username %> </p><br>
+            <h3 style="margin-left: 10px;"><%= mes[i].content %> </h3><br>
+        </div>
+        <% } %> 
+
+    <% } %> 
+    <form action = "/chat/<%= team._id %>" method="POST" id = "sent">
+        <div>
+            <label for="content"></label><br>
+            <textarea name="content" id="content"  placeholder="Type Your Message" required  ></textarea>
+            <button  id = "send" onclick="scrollWin();" style="color: white;border: none;"><img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQXDeNo1OigIY7lOUpDM4OYxHCmpu3_J6uhbg30QduzV-R-EQ_eu_znAxwKVRXwsauwh4&usqp=CAU" width="40px" height="40px"  onclick="scrollWin();"></button>
+ 
+        </div>
+       
+        
+    </form>
+</div>
+<script>
+    function scrollWin() {
+        var elemScrollHeight;
+        elemScrollHeight = body.scrollHeight;
+      window.scrollTo(30,1500);
+    }
+    </script>
+</body>
+</html>

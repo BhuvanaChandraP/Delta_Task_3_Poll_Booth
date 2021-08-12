@@ -29,14 +29,19 @@
             border-radius: 8px;
         
         }
+        textarea{
+            border: none;
+            
+            
+            padding-top: 8px;
+            padding-bottom: 8px;
+            text-align: center;
+            border-radius: 8px;
+        
+        }
         #deadline{
             border: none;
-            /* padding: 8px; */
-            /* padding-left: 50px; */
-            /* padding-right: 50px;
-            padding-top: 8px;
-            padding-bottom: 8px; */
-            /* text-align: center; */
+           
             border-radius: 8px;
             width: 120px;
         }
@@ -48,8 +53,8 @@
         }
         #question{
             line-break: auto;
-            width: 100px;
-            height: 80px;
+            width: 200px;
+            height: 60px;
         }
         a{
             text-decoration: none;
@@ -76,8 +81,12 @@
             
            
             <label  for="question">Question :</label><br>
-            <input id = "question" type="text" name="question" placeholder="Question" required >
-
+            <textarea   id = "question" type="text" name="question" placeholder="Question" required width = "250px"  height = "60px"></textarea>
+            
+            <!-- <input id = "question" type="text" name="question" placeholder="Question" required > -->
+            <% let d = new Date()%>
+            <% let n = d.toISOString()%>
+            <% n= n.slice(0,-8)%>
             
             <div id = "container1">
                 <label  for="options">Options :</label><br>
@@ -87,7 +96,7 @@
             </div>
             <br><br>
             <label  for="deadline">Deadline :</label><br>
-            <input type="datetime-local" name="deadline" id="deadline" placeholder="Deadline" required>
+            <input type="datetime-local" name="deadline" id="deadline" placeholder="Deadline"onchange="return dateValidation()" min=<%=n%>  required>
             <br><br>
             <button>Create Poll</button>
         </form>
@@ -109,7 +118,19 @@
             
             i++;
         }
-       
+        function dateValidation(){
+            let deadline = document.getElementById('deadline');
+            let deadlineDate = deadline.value;
+            if(deadlineDate!=''){
+                let now = Date.now();
+                let deadlineFormat = new Date(deadlineDate);
+            if(deadlineFormat<now){
+                alert('Please enter a future time as deadline');
+                deadline.value='';
+                return false;
+            }
+            }
+        }
         
     </script>
     

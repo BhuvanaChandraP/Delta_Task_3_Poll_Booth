@@ -8,9 +8,25 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const Team = require('./models/teams');
 const Poll =  require('./models/polls');
-
+const Message =  require('./models/message');
+const nodemailer = require('nodemailer');
+const methodOverride = require('method-override');
 let n;
 let te
+
+
+const { google } = require("googleapis");
+const { OAuth2 } = google.auth;
+
+const OAuth2Client = new OAuth2(
+    '853659705276-q9fco93vjg4suvf6usn9sol0t0upornp.apps.googleusercontent.com',
+    'CqGl494eryOUsMfgzTpFgDC1',
+    'http://localhost:3000/google'
+);
+
+const SCOPES = ["https://www.googleapis.com/auth/calendar"];
+
+let calendarEvent;
 
 mongoose.connect('mongodb://localhost:27017/poll-booth', {
     useNewUrlParser: true,
@@ -32,6 +48,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret!',
@@ -62,6 +79,9 @@ app.use((req,res,next)=>{
     next();
 })
 
+app.get('/' ,(req,res)=>{
+    res.redirect('/register')
+})
 
 app.get('/register', (req, res) => {
     try{
@@ -81,6 +101,24 @@ app.post('/register' , async(req,res,next)=>{
     // console.log(registeredUser);
     req.flash('success',"Successfully Registered");
     res.redirect('login'); 
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',auth: {user: 'pollboothdeltatask@gmail.com',pass: 'Delta*003'}});
+        
+        var mailOptions = {
+            from: 'pollboothdeltatask@gmail.com',
+            to:`${user.email}`,
+            subject: 'Registration confirmation from Poll Booth',
+            text: `Welcome ${user.username},\n Greetings from Poll Booth! \n You have succesfully registered into our website \n Login and explore more`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+            console.log(error);
+            } else {
+            console.log('Email sent: ' + info.response);
+            }
+    });
     }
     catch(err){
         console.log(err);
@@ -141,6 +179,7 @@ app.post('/CreateNewTeam' , async(req,res)=>{
             res.redirect('login')
         }
         else{
+            let mem ,mem1;
             const { name ,description, members ,invited } = req.body;
             const team = new Team({ name ,description, members ,invited});     
             await team.save();
@@ -154,7 +193,36 @@ app.post('/CreateNewTeam' , async(req,res)=>{
                 new: true
             });
             await d2.save()  
-            console.log(d2);
+            //console.log(d2);
+            const team2 = await  Team.findOne(filter1)
+            //console.log(team2);
+            mem1 = await User.findById(team2.members[0]);
+            
+            for(let m = 0 ; m < team2.invited.length;m++){
+                console.log(team2.invited[m]);
+                mem = await User.findById(team2.invited[m]);
+              
+                console.log(mem);
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',auth: {user: 'pollboothdeltatask@gmail.com',pass: 'Delta*003'}});
+                    
+                    var mailOptions = {
+                        from: 'pollboothdeltatask@gmail.com',
+                        to:`${mem.email}`,
+                        subject: 'Notification from Poll Booth',
+                        text: `Hello ${mem.username},\n Greetings from Poll Booth! \n ${mem1.username} has invited you to join the team '${team2.name}' \n `
+                    };
+                    
+                    transporter.sendMail(mailOptions, function(error, info){
+                        if (error) {
+                        console.log(error);
+                        } else {
+                        console.log('Email sent: ' + info.response);
+                        }
+                    });
+
+            }
+
             req.flash('success',"Successfully Created a Team");
             res.redirect('allteams')
         }
@@ -239,24 +307,29 @@ app.get('/dashboard1',async(req,res)=>{
     }
 })
 app.get('/accept/:id',async(req,res)=>{
-    const t = await Team.findById(req.params.id).populate('members').populate('invited')
-    const filter1 = { _id:req.params.id };
-   
-    const d1 = await Team.findOneAndUpdate( filter1 , { $push: {members:req.user} }, {
-        new: true
-    });
-    await d1.save()  
-   
-    const d2 = await Team.findOneAndUpdate( filter1 , { $pull : {invited:req.user._id} }, { new : true });
+    if(!req.isAuthenticated()){
+        res.redirect('login')
+    }
+   else{
+        const t = await Team.findById(req.params.id).populate('members').populate('invited')
+        const filter1 = { _id:req.params.id };
+    
+        const d1 = await Team.findOneAndUpdate( filter1 , { $addToSet: {members:req.user} }, {
+            new: true
+        });
+        await d1.save()  
+    
+        const d2 = await Team.findOneAndUpdate( filter1 , { $pull : {invited:req.user._id} }, { new : true });
+            
+        await d2.save()  
         
-    await d2.save()  
-    console.log(d2)
-    const filter2 = { username: d2.owner};
-    const update2 = {$push : { notification : req.user.username  + " has joined the team " + d2.name + " via invite link"} }
-    const d3 = await User.findOneAndUpdate( filter2 , update2 , { new : true });
-        
-    await d3.save()  
-    res.redirect(`/team/:${req.params.id}`);
+        const filter2 = { username: d2.owner};
+        const update2 = {$push : { notification : req.user.username  + " has joined the team " + d2.name + " via invite link"} }
+        const d3 = await User.findOneAndUpdate( filter2 , update2 , { new : true });
+            
+        await d3.save()  
+        res.redirect(`/team/:${req.params.id}`);
+    }
     //res.send({d2})
 })
 app.get('/decline/:id',async(req,res)=>{
@@ -264,7 +337,7 @@ app.get('/decline/:id',async(req,res)=>{
     const d2 = await Team.findOneAndUpdate( filter1 , { $pull : {invited:req.user._id} }, { new : true });
         
     await d2.save()  
-    console.log(d2)
+    
     if(req.user.type == 'admin'){
         res.redirect('/dashboard1')
     }
@@ -291,12 +364,21 @@ app.get('/allteams',async(req,res)=>{
 
 
 app.get('/displaypolls/:id', async(req,res)=>{
+    if(!req.isAuthenticated()){
+        res.redirect('login')
+    }
+    else{
     const p = await Poll.findById(req.params.id).populate('team');
     const team1 = await Team.findById(p.team._id)
     // console.log(team1);
     res.render('displaypolls' ,{ p , n:req.user ,team1 })
+    }
 })
 app.post('/displaypolls/:id',async(req,res)=>{
+    if(!req.isAuthenticated()){
+        res.redirect('login')
+    }
+    else{
     const p = await Poll.findById(req.params.id)
     const s = req.body.options
     //console.log(s);
@@ -312,7 +394,7 @@ app.post('/displaypolls/:id',async(req,res)=>{
         new: true
     });
     await d2.save()
-    console.log(d2);
+    //console.log(d2);
 
     const use = await User.find({});
     const team1 = await Team.findOne({polls : req.params.id}).populate('polls').populate('members')
@@ -322,16 +404,73 @@ app.post('/displaypolls/:id',async(req,res)=>{
     const d3 = await User.findOneAndUpdate( filter3 , update3 , { new : true });
         
     await d3.save()
-    //console.log(t);
-    //const team1 = await Team.findById(req.params.id).populate('members').populate('polls')
+   
     const poll1 = await Poll.find({team : team1._id}).populate('team')
     res.render('showteams' , {team1  , poll1 , n:req.user} )
+}
 
 })
 
+app.get('/chat/:id' , async(req,res)=>{
+    if(!req.isAuthenticated()){
+        res.redirect('login')
+    }
+    else{
+    const team = await Team.findById(req.params.id).populate('chats').populate('sentBy');
+    //console.log(team);
+    const mes = await  Message.find({belong : req.params.id}).populate('sentBy').populate('belong');
+    res.render('chat' , { team , n:req.user ,mes});
+    }
+})
+app.post('/chat/:id' , async(req,res)=>{
+    if(!req.isAuthenticated()){
+        res.redirect('login')
+    }
+    else{
+    const s = req.body.content;
+    const { content } = req.body;
+    const message1 = new Message({ content });     
+    await message1.save();
+   
+    const filter2 = { content: s };
 
+    const d2 = await Message.findOneAndUpdate( filter2 ,  { sentBy : req.user} , {
+        new: true
+    });
+    await d2.save()
+    const d4 = await Message.findOneAndUpdate( filter2 ,  { belong: req.params.id} , {
+        new: true
+    });
+    await d4.save()
+    const filter3 = { _id: req.params.id };
 
+    const d3 = await Team.findOneAndUpdate( filter3 , {$push : { chats : d2._id} } , {
+        new: true
+    });
+    await d3.save()
 
+    const team = await  Team.findById(req.params.id).populate('chats').populate('sentBy');
+    //console.log(team);
+    const mes = await  Message.find({belong : req.params.id}).populate('sentBy').populate('belong');
+    res.render('chat' , { team ,n:req.user ,mes });
+    }
+})
+app.delete('/chat/:id' , async(req,res)=>{
+    if(!req.isAuthenticated()){
+        res.redirect('login')
+    }
+    else{
+        console.log("hi")
+        const query = {belong : req.params.id};
+        const result = await Message.deleteMany(query);
+        // const mes = await  Message.findAndDelete({belong : req.params.id});
+        const sss = await Team.findOne({_id: req.params.id})
+        sss.chats = [];
+        await sss.save();
+        
+        res.redirect(`/chat/${req.params.id}`);
+    }
+})
 
 app.get('/endpoll/:id' ,async(req,res)=>{
     const p = await  Poll.findById(req.params.id).populate('team')
@@ -413,23 +552,120 @@ app.get('/notifications' ,async(req ,res)=>{
 })
 
 
+app.get("/pollcal/:id",  async (req, res) => {
+    const filter1 = { _id:req.params.id };
+    //const up = {}
+    let d = await Poll.findOneAndUpdate( filter1 ,{$push: {calAdd : req.user.username} }, {
+        new: true
+    });
+    await d.save()
+    console.log("got")
+    const event = await Poll.findOne({ _id: req.params.id });
+    
+    if (!event) {
+      req.flash("error_msg", "unable to find the requested event");
+      if(req.user.type == "admin")
+        {
+            res.redirect('/dashboard1')
+        }
+        else{
+            res.redirect('/dashboard')
+        }
+      //res.redirect("/dashboard");
+      return;
+    }
+  
+    let eventEndTime = new Date(event.deadline);
+    eventEndTime.setHours(eventEndTime.getHours() -1);
+  
+    calendarEvent = {
+      summary: "Poll",
+      location: "",
+      description: "Poll ends",
+      start: {
+        dateTime: eventEndTime,
+        timeZone: "Asia/Kolkata",
+      },
+      end: {
+        dateTime: event.deadline,
+        timeZone: "Asia/Kolkata",
+      },
+    };
+  
+    const authUrl = OAuth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: SCOPES,
+    });
+    res.redirect(authUrl);
+  });
+  
+  app.get("/google",  (req, res) => {
+    OAuth2Client.getToken(req.query.code, async (err, token) => {
+      if (err) {
+        req.flash("error_msg", "Error retrieving access token");
+        if(req.user.type == "admin")
+        {
+            res.redirect('/dashboard1')
+        }
+        else{
+            res.redirect('/dashboard')
+        }
+      
+        return console.error("Error retrieving access token", err);
+      }
+      OAuth2Client.setCredentials(token);
+      await start(req, res);
+    });
+  });
+  
+  const calendar = google.calendar({
+    version: "v3",
+    auth: OAuth2Client,
+  });
+  
+  //to create event
+  function start(req, res) {
+    calendar.events.insert(
+      {
+        auth: OAuth2Client,
+        calendarId: "primary",
+        resource: calendarEvent,
+      },
+      function (err, event) {
+        if (err) {
+          req.flash(
+            "error_msg",
+            "There was an error contacting the Calendar service"
+          );
+          if(req.user.type == "admin")
+            {
+                res.redirect('/dashboard1')
+            }
+            else{
+                res.redirect('/dashboard')
+            }
+         
+          console.log(
+            "There was an error contacting the Calendar service: " + err
+          );
+          return;
+        }
+        req.flash("success_msg", "event added to google calendar successfully");
+        if(req.user.type == "admin")
+        {
+            res.redirect('/dashboard1')
+        }
+        else{
+            res.redirect('/dashboard')
+        }
+        //res.redirect("/dashboard");
+      }
+    );
+  }
+ 
 app.listen(3000, () => {
     console.log('Listening on port 3000')
 })
 
 
 
-// app.get('/secret',(req,res)=>{
-//     if(!req.isAuthenticated()){
-//         res.redirect('login')
-//     }
-//     else{
-//         res.send("A Big Secret")
-//     }
-// })
-
-// app.get('/fake' , async (req,res)=>{
-//     const user = new User ({email:'bhu@gmail.com' ,type :'admin',gender:'female' ,username :"Bhuvana"})
-//     const newUser = await User.register(user,'992002');
-//     res.send(newUser);
-// })
