@@ -109,7 +109,7 @@ app.post('/register' , async(req,res,next)=>{
             from: 'pollboothdeltatask@gmail.com',
             to:`${user.email}`,
             subject: 'Registration confirmation from Poll Booth',
-            text: `Welcome ${user.username},\n Greetings from Poll Booth! \n You have succesfully registered into our website \n Login and explore more`
+            text: `Welcome ${user.username},\n Greetings from Poll Booth! \n You have succesfully registered into our website . Login and explore more`
         };
         
         transporter.sendMail(mailOptions, function(error, info){
@@ -202,7 +202,7 @@ app.post('/CreateNewTeam' , async(req,res)=>{
                 console.log(team2.invited[m]);
                 mem = await User.findById(team2.invited[m]);
               
-                console.log(mem);
+                //console.log(mem);
                 var transporter = nodemailer.createTransport({
                     service: 'gmail',auth: {user: 'pollboothdeltatask@gmail.com',pass: 'Delta*003'}});
                     
@@ -559,7 +559,7 @@ app.get("/pollcal/:id",  async (req, res) => {
         new: true
     });
     await d.save()
-    console.log("got")
+    //console.log("got")
     const event = await Poll.findOne({ _id: req.params.id });
     
     if (!event) {
@@ -579,9 +579,9 @@ app.get("/pollcal/:id",  async (req, res) => {
     eventEndTime.setHours(eventEndTime.getHours() -1);
   
     calendarEvent = {
-      summary: "Poll",
+      summary: "Poll Deadline",
       location: "",
-      description: "Poll ends",
+      description: event.question ,
       start: {
         dateTime: eventEndTime,
         timeZone: "Asia/Kolkata",
